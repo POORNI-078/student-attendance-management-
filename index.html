@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VVIT | Attendance Management</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #faf8f2;
+  color: #34483b;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #314b3b, #55705b);
+  color: white;
+  padding: 24px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.logo h1 {
+  font-size: 25px;
+  letter-spacing: 1px;
+}
+
+.logo p {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #dce7dc;
+}
+
+.badge {
+  border: 1px solid #a5bba8;
+  padding: 9px 16px;
+  border-radius: 25px;
+  font-size: 12px;
+}
+
+/* MAIN */
+.container {
+  width: 90%;
+  max-width: 1250px;
+  margin: 35px auto;
+}
+
+.welcome {
+  margin-bottom: 25px;
+}
+
+.welcome h2 {
+  font-size: 29px;
+  color: #314b3b;
+  margin-bottom: 8px;
+}
+
+.welcome p {
+  color: #7d8d80;
+  font-size: 14px;
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #e0e7dc;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 6px 20px rgba(49,75,59,.05);
+}
+
+.stat-card h4 {
+  font-size: 13px;
+  color: #7d8d80;
+  font-weight: 500;
+}
+
+.stat-card h3 {
+  font-size: 28px;
+  color: #314b3b;
+  margin-top: 10px;
+}
+
+/* LAYOUT */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 25px;
+  align-items: start;
+}
+
+/* PANELS */
+.panel {
+  background: white;
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid #e0e7dc;
+  box-shadow: 0 6px 22px rgba(49,75,59,.05);
+}
+
+.panel-title {
+  font-size: 20px;
+  color: #314b3b;
+  margin-bottom: 7px;
+}
+
+.panel-subtitle {
+  color: #8a998d;
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+
+/* FORM */
+.form-group {
+  margin-bottom: 17px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: #536858;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d5dfd1;
+  border-radius: 9px;
+  outline: none;
+  background: #fdfdf9;
+  color: #34483b;
+  font-size: 13px;
+}
+
+input:focus, select:focus {
+  border-color: #78947d;
+  box-shadow: 0 0 0 3px rgba(120,148,125,.12);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* BUTTONS */
+button {
+  border: none;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  background: #48664f;
+  color: white;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.submit-btn:hover {
+  background: #314b3b;
+}
+
+.clear-btn {
+  width: 100%;
+  padding: 11px;
+  margin-top: 10px;
+  background: #edf2e9;
+  color: #536858;
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+/* TABLE */
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+
+th {
+  text-align: left;
+  font-size: 11px;
+  color: #647b69;
+  background: #eef3eb;
+  padding: 13px 10px;
+  font-weight: 600;
+}
+
+td {
+  padding: 13px 10px;
+  font-size: 12px;
+  color: #536858;
+  border-bottom: 1px solid #edf1e9;
+}
+
+td:first-child {
+  color: #314b3b;
+  font-weight: 600;
+}
+
+.status {
+  background: #e7f2e8;
+  color: #34704b;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.low {
+  background: #fff0e4;
+  color: #ad6735;
+}
+
+/* FILTER */
+.filter-box {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-box .form-group {
+  flex: 1;
+  min-width: 160px;
+  margin-bottom: 0;
+}
+
+.filter-btn {
+  background: #e8efe4;
+  color: #3d5a44;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 12px;
+}
+
+.empty {
+  text-align: center;
+  padding: 35px 10px;
+  color: #a1b0a3;
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #98a797;
+  font-size: 11px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 850px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media(max-width: 550px) {
+  header {
+    padding: 22px 5%;
+  }
+
+  .logo h1 {
+    font-size: 19px;
+  }
+
+  .container {
+    width: 92%;
+    margin: 25px auto;
+  }
+
+  .stats {
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 14px 10px;
+  }
+
+  .stat-card h3 {
+    font-size: 21px;
+  }
+
+  .stat-card h4 {
+    font-size: 10px;
+  }
+
+  .panel {
+    padding: 20px 16px;
+  }
+
+  .welcome h2 {
+    font-size: 23px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <h1>VVIT</h1>
+    <p>Varuvan Vadivelan Institute of Technology</p>
+  </div>
+  <div class="badge">STUDENT PORTAL</div>
+</header>
+
+<div class="container">
+
+  <div class="welcome">
+    <h2>Attendance Management</h2>
+    <p>Manage student attendance records with daily date tracking.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <h4>Total Students</h4>
+      <h3 id="totalStudents">0</h3>
+    </div>
+
+    <div class="stat-card">
+      <h4>Present Records</h4>
+      <h3 id="presentRecords">0</h3>
+    </div>
+
+    <div class="stat-card">
+      <h4>Average Attendance</h4>
+      <h3 id="averageAttendance">0%</h3>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- FORM -->
+    <div class="panel">
+      <h2 class="panel-title">Add Attendance</h2>
+      <p class="panel-subtitle">Enter student details and attendance date.</p>
+
+      <form id="attendanceForm">
+
+        <div class="form-group">
+          <label>Student Name</label>
+          <input type="text" id="name"
+                 placeholder="Enter student name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Register Number</label>
+          <input type="text" id="regno"
+                 placeholder="Enter register number" required>
+        </div>
+
+        <div class="form-group">
+          <label>Attendance Date</label>
+          <input type="date" id="attendanceDate" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Department</label>
+            <select id="department" required>
+              <option value="">Select</option>
+              <option value="CSE">CSE</option>
+              <option value="ECE">ECE</option>
+              <option value="EEE">EEE</option>
+              <option value="MECH">MECH</option>
+              <option value="CIVIL">CIVIL</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Year</label>
+            <select id="year" required>
+              <option value="">Select</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Total Days</label>
+            <input type="number" id="totalDays"
+                   placeholder="Total days" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label>Present Days</label>
+            <input type="number" id="presentDays"
+                   placeholder="Present days" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Attendance Percentage</label>
+          <input type="text" id="attendance"
+                 placeholder="Auto calculated" readonly>
+        </div>
+
+        <button class="submit-btn" type="submit">
+          Save Attendance
+        </button>
+
+        <button class="clear-btn" type="reset">
+          Clear Form
+        </button>
+
+      </form>
+    </div>
+
+    <!-- RECORDS -->
+    <div class="panel">
+      <h2 class="panel-title">Student Records</h2>
+      <p class="panel-subtitle">
+        View attendance records by date.
+      </p>
+
+      <div class="filter-box">
+        <div class="form-group">
+          <label>Filter by Date</label>
+          <input type="date" id="filterDate">
+        </div>
+
+        <button class="filter-btn" id="clearFilter">
+          Show All
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Reg No</th>
+              <th>Department</th>
+              <th>Attendance</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="recordsBody">
+            <tr>
+              <td colspan="6" class="empty">
+                No records added yet.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  © 2026 Varuvan Vadivelan Institute of Technology | Student Portal
+</footer>
+
+<script>
+
+/* GOOGLE APPS SCRIPT URL
+   Paste your deployed Web App URL here.
+*/
+const scriptURL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+
+/* ELEMENTS */
+const form = document.getElementById("attendanceForm");
+
+const nameInput = document.getElementById("name");
+const regnoInput = document.getElementById("regno");
+const departmentInput = document.getElementById("department");
+const yearInput = document.getElementById("year");
+
+const dateInput = document.getElementById("attendanceDate");
+const totalDaysInput = document.getElementById("totalDays");
+const presentDaysInput = document.getElementById("presentDays");
+const attendanceInput = document.getElementById("attendance");
+
+const recordsBody = document.getElementById("recordsBody");
+const filterDate = document.getElementById("filterDate");
+const clearFilter = document.getElementById("clearFilter");
+
+let records = [];
+
+
+/* TODAY'S DATE */
+function getToday() {
+
+  const today = new Date();
+
+  const year = today.getFullYear();
+
+  const month = String(
+    today.getMonth() + 1
+  ).padStart(2, "0");
+
+  const day = String(
+    today.getDate()
+  ).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+dateInput.value = getToday();
+
+
+/* CALCULATE ATTENDANCE */
+function calculateAttendance() {
+
+  const total = Number(totalDaysInput.value);
+  const present = Number(presentDaysInput.value);
+
+  if (
+    total > 0 &&
+    present >= 0 &&
+    present <= total
+  ) {
+
+    attendanceInput.value =
+      ((present / total) * 100).toFixed(2) + "%";
+
+  } else {
+
+    attendanceInput.value = "";
+
+  }
+}
+
+totalDaysInput.addEventListener(
+  "input",
+  calculateAttendance
+);
+
+presentDaysInput.addEventListener(
+  "input",
+  calculateAttendance
+);
+
+
+/* FORM SUBMIT */
+form.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  const total = Number(totalDaysInput.value);
+  const present = Number(presentDaysInput.value);
+
+  if (present > total) {
+    alert("Present days cannot exceed total days.");
+    return;
+  }
+
+  const percentage = (present / total) * 100;
+
+  const student = {
+
+    name: nameInput.value.trim(),
+
+    regno: regnoInput.value.trim(),
+
+    department: departmentInput.value,
+
+    year: yearInput.value,
+
+    attendanceDate: dateInput.value,
+
+    totalDays: total,
+
+    presentDays: present,
+
+    attendance: percentage.toFixed(2) + "%"
+
+  };
+
+
+  /* LOCAL TABLE */
+  records.push(student);
+
+  displayRecords();
+
+  updateStats();
+
+
+  /* GOOGLE SHEETS */
+  if (scriptURL !== "PASTE_YOUR_WEB_APP_URL_HERE") {
+
+    try {
+
+      const response = await fetch(scriptURL, {
+
+        method: "POST",
+
+        body: JSON.stringify(student)
+
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response failed");
+      }
+
+      alert("Attendance saved successfully!");
+
+    } catch (error) {
+
+      alert(
+        "Record added locally, but Google Sheet sync failed."
+      );
+
+      console.error(error);
+
+    }
+
+  } else {
+
+    alert(
+      "Record added locally. Add your Google Apps Script URL to sync with Google Sheets."
+    );
+
+  }
+
+  form.reset();
+
+  dateInput.value = getToday();
+
+  attendanceInput.value = "";
+
+});
+
+
+/* DISPLAY RECORDS */
+function displayRecords() {
+
+  recordsBody.innerHTML = "";
+
+  const selectedDate = filterDate.value;
+
+  const filteredRecords = selectedDate
+    ? records.filter(function(student) {
+        return student.attendanceDate === selectedDate;
+      })
+    : records;
+
+
+  if (filteredRecords.length === 0) {
+
+    recordsBody.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty">
+          No records found for this date.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  filteredRecords.forEach(function(student) {
+
+    const row = document.createElement("tr");
+
+    const dateCell = document.createElement("td");
+    dateCell.textContent = student.attendanceDate;
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = student.name;
+
+    const regnoCell = document.createElement("td");
+    regnoCell.textContent = student.regno;
+
+    const deptCell = document.createElement("td");
+    deptCell.textContent = student.department;
+
+    const attendanceCell = document.createElement("td");
+    attendanceCell.textContent = student.attendance;
+
+    const statusCell = document.createElement("td");
+
+    const status = document.createElement("span");
+
+    status.className = "status";
+
+    const percentage = Number(
+      student.attendance.replace("%", "")
+    );
+
+    if (percentage >= 75) {
+
+      status.textContent = "Good";
+
+    } else {
+
+      status.textContent = "Low";
+
+      status.classList.add("low");
+
+    }
+
+    statusCell.appendChild(status);
+
+    row.appendChild(dateCell);
+    row.appendChild(nameCell);
+    row.appendChild(regnoCell);
+    row.appendChild(deptCell);
+    row.appendChild(attendanceCell);
+    row.appendChild(statusCell);
+
+    recordsBody.appendChild(row);
+
+  });
+
+}
+
+
+/* UPDATE STATS */
+function updateStats() {
+
+  document.getElementById("totalStudents").textContent =
+    records.length;
+
+  document.getElementById("presentRecords").textContent =
+    records.filter(function(student) {
+
+      return Number(
+        student.attendance.replace("%", "")
+      ) >= 75;
+
+    }).length;
+
+
+  if (records.length > 0) {
+
+    const total = records.reduce(function(sum, student) {
+
+      return sum + Number(
+        student.attendance.replace("%", "")
+      );
+
+    }, 0);
+
+    document.getElementById("averageAttendance").textContent =
+      (total / records.length).toFixed(1) + "%";
+
+  } else {
+
+    document.getElementById("averageAttendance").textContent =
+      "0%";
+
+  }
+
+}
+
+
+/* DATE FILTER */
+filterDate.addEventListener("change", function() {
+
+  displayRecords();
+
+});
+
+
+/* SHOW ALL */
+clearFilter.addEventListener("click", function() {
+
+  filterDate.value = "";
+
+  displayRecords();
+
+});
+
+</script>
+
+</body>
+</html>
